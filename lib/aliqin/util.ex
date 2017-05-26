@@ -50,7 +50,7 @@ defmodule Aliqin.Util do
   end
 
   @doc """
-  发送一个GET网络请求
+  发送一个POSt网络请求
   """
   def post!(url, body, opts \\ []) do
     headers =

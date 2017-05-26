@@ -4,5 +4,14 @@ defmodule AliqinTest do
   alias Aliqin
 
   test "sms_num_send! OK" do
+    ### Aliqin.sms_num_send!(">>>>app_key<<<<", [
+    ###   sign_name: "签名",
+    ###   templdate_key: :regiester_verify_code,
+    ###   numbers: ["13100000000"],
+    ###   sms_params: %{
+    ###     code: "938402",
+    ###     product: "签名"
+    ###   }
+    ### ])
   end
 end

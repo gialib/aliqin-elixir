@@ -23,10 +23,9 @@ defmodule Aliqin do
   """
   def execute(sdk_key, api_name_key, params \\ %{}) do
     sdk_key = :"#{sdk_key}"
-    config = sdk_config(sdk_key)
-
     app_key = "#{sdk_key}"
-    app_secret = config |> Map.get(:app_secret)
+
+    app_secret = sdk_key |> get_sdk_config_by_key() |> Map.get(:app_secret)
     sign_method = "md5"
     api_name = @api_names |> Map.get(api_name_key)
 
@@ -57,7 +56,7 @@ defmodule Aliqin do
 
   def sdk_keys, do: @sdk_keys
 
-  def sdk_config(key) do
+  def get_sdk_config_by_key(key) do
     key = :"#{key}"
 
     if config = @sdk_keys |> Keyword.get(key) do
@@ -79,7 +78,6 @@ defmodule Aliqin do
   ```
   """
   def sms_num_send!(sdk_key, opts \\ []) do
-    config = sdk_config(sdk_key)
     templdate_key = :"#{Keyword.get(opts, :templdate_key)}"
 
     params = %{}
@@ -117,7 +115,7 @@ defmodule Aliqin do
       end
 
     params =
-      if templdate_code = get_in(config, [:usages, :sms_num_send, :templdate_codes, templdate_key]) do
+      if templdate_code = get_in(get_sdk_config_by_key(sdk_key), [:usages, :sms_num_send, :templdate_codes, templdate_key]) do
         params |> Map.put(:sms_template_code, templdate_code)
       else
         params
