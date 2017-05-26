@@ -25,9 +25,9 @@ defmodule Aliqin.Mixfile do
     [
       {:timex, "~> 3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:poison, github: "devinus/poison", override: true},
-      {:httpoison, github: "edgurgel/httpoison", override: true},
-      {:hackney, "1.7.1", manager: :rebar3, override: true}
+      {:poison, ">= 0.0.0"},
+      {:httpoison, ">= 0.0.0"},
+      {:hackney, ">= 0.0.0"}
     ]
   end
 
@@ -37,10 +37,10 @@ defmodule Aliqin.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*", "CHANGELOG*", "LICENSE*"],
+      files: ["lib", "mix.exs", "README*"],
       maintainers: ["happy"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/gialib/aliqin"}
+      links: %{"GitHub" => "https://github.com/gialib/aliqin-elixir"}
     ]
   end
 end
