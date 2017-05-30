@@ -1,5 +1,7 @@
 defmodule Aliqin.SmsAPI do
 
+  ## ## https://api.alidayu.com/docs/api.htm?spm=a3142.7395905.4.6.2sEFoj&apiId=25450
+
   @doc """
   发送手机短信
   ```
@@ -55,7 +57,7 @@ defmodule Aliqin.SmsAPI do
         params
       end
 
-    Aliqin.execute(sdk_key, :sms_num_send, params)
+    Aliqin.execute(sdk_key, :sms_num_send, params) |> Aliqin.Util.decode!
   end
 
 end

@@ -72,7 +72,7 @@ defmodule Aliqin.Util do
       {:ok, %HTTPoison.Response{body: _response_body, headers: _headers, status_code: status_code}} ->
         {:error, :"error_#{status_code}"}
       {:error, %HTTPoison.Error{reason: reason}} ->
-        {:error, :"#{reason}"}
+        {:error, :"error_#{reason}"}
       _ ->
         {:error, :unknow_error}
     end
