@@ -11,6 +11,34 @@ defmodule Aliqin.SmsAPI do
   * templdate_key(*)    # 模板的标识
   * sms_params(* Map)   # 自定义
   * extend              # 扩展参数
+  ## return
+  * 成功
+    {
+      :ok,
+      %{
+        "alibaba_aliqin_fc_sms_num_send_response" => %{
+          "request_id" => "2el3seggq8bk",
+          "result" => %{
+            "err_code" => "0",
+            "model" => "107841060691^1110524204993",
+            "success" => true
+          }
+        }
+      }
+    }
+  * 失败: 频率过高
+    {
+      :ok,
+      %{
+        "error_response" => %{
+          "code" => 15,
+          "msg" => "Remote service error",
+          "request_id" => "10cgrzyb02x1i",
+          "sub_code" => "isv.BUSINESS_LIMIT_CONTROL",
+          "sub_msg" => "触发业务流控"
+        }
+      }
+    }
   ```
   """
   def num_send!(sdk_key, opts \\ []) do
@@ -57,7 +85,21 @@ defmodule Aliqin.SmsAPI do
         params
       end
 
-    Aliqin.execute(sdk_key, :sms_num_send, params) |> Aliqin.Util.decode!
+    response = Aliqin.execute(sdk_key, :sms_num_send, params) |> Aliqin.Util.decode!
+
+    case response do
+      {:ok, response_body} ->
+        case response_body do
+          %{"alibaba_aliqin_fc_sms_num_send_response" => %{"request_id" => request_id, "result" => %{"err_code" => "0", "model" => request_model, "success" => true}}} ->
+            {:ok, %{request_id: request_id, request_model: request_model}}
+          %{"error_response" => %{"code" => error_code, "msg" => error_message, "request_id" => request_id}} ->
+            {:error, %{error_key: :send_fail, error_message: error_message, request_id: request_id, error_code: error_code}}
+          _ ->
+            {:error, %{error_key: :unknown_error, response_body: response_body}}
+        end
+      {:error, error_key} ->
+        {:error, %{error_key: error_key}}
+    end
   end
 
 end

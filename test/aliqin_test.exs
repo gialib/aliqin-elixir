@@ -5,7 +5,7 @@ defmodule AliqinTest do
 
   # 测试签名错误的情况
   test "sms_num_send! fail" do
-    {:ok, response_body} =
+    {:error, response} =
       Aliqin.sms_num_send!(">>>>app_key<<<<", [
         sign_name: "签名",
         templdate_key: :regiester_verify_code,
@@ -16,9 +16,13 @@ defmodule AliqinTest do
         }
       ])
 
-    assert get_in(response_body, ["error_response", "code"]) == 29
-    assert get_in(response_body, ["error_response", "msg"]) == "Invalid app Key"
-    assert get_in(response_body, ["error_response", "sub_code"]) == "isv.appkey-not-exists"
+    {:error, %{error_code: 29, error_key: :send_fail, error_message: "Invalid app Key", request_id: "z2ak7m069sah"}}
+
+    assert Map.take(response, [:error_code, :error_key, :error_message]) == %{
+      error_code: 29,
+      error_key: :send_fail,
+      error_message: "Invalid app Key"
+    }
   end
 
   test "sms_num_send! with mock success" do

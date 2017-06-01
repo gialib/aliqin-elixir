@@ -7,7 +7,7 @@ by adding `aliqin` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:aliqin, "~> 0.1.0"}]
+  [{:aliqin, "~> 0.1.1"}]
 end
 ```
 
