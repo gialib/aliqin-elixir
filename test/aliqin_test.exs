@@ -2,7 +2,6 @@ defmodule AliqinTest do
   use ExUnit.Case
 
   alias Aliqin
-  import Mock
 
   # 测试签名错误的情况
   test "sms_num_send! fail" do
@@ -23,6 +22,6 @@ defmodule AliqinTest do
   end
 
   test "sms_num_send! with mock success" do
-    with_mock 
+
   end
 end

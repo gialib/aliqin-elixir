@@ -25,7 +25,6 @@ defmodule Aliqin.Mixfile do
     [
       {:timex, "~> 3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:mock, "~> 0.2.0", only: :test},
       {:poison, ">= 0.0.0"},
       {:httpoison, ">= 0.0.0"},
       {:hackney, ">= 0.0.0"}
