@@ -2,6 +2,8 @@ defmodule Aliqin.SmsAPI do
 
   ## ## https://api.alidayu.com/docs/api.htm?spm=a3142.7395905.4.6.2sEFoj&apiId=25450
 
+  require Logger
+
   @doc """
   发送手机短信
   ```
@@ -87,19 +89,26 @@ defmodule Aliqin.SmsAPI do
 
     response = Aliqin.execute(sdk_key, :sms_num_send, params) |> Aliqin.Util.decode!
 
-    case response do
-      {:ok, response_body} ->
-        case response_body do
-          %{"alibaba_aliqin_fc_sms_num_send_response" => %{"request_id" => request_id, "result" => %{"err_code" => "0", "model" => request_model, "success" => true}}} ->
-            {:ok, %{request_id: request_id, request_model: request_model}}
-          %{"error_response" => %{"code" => error_code, "msg" => error_message, "request_id" => request_id}} ->
-            {:error, %{error_key: :send_fail, error_message: error_message, request_id: request_id, error_code: error_code}}
-          _ ->
-            {:error, %{error_key: :unknown_error, response_body: response_body}}
-        end
-      {:error, error_key} ->
-        {:error, %{error_key: error_key}}
+    final_response =
+      case response do
+        {:ok, response_body} ->
+          case response_body do
+            %{"alibaba_aliqin_fc_sms_num_send_response" => %{"request_id" => request_id, "result" => %{"err_code" => "0", "model" => request_model, "success" => true}}} ->
+              {:ok, %{request_id: request_id, request_model: request_model}}
+            %{"error_response" => %{"code" => error_code, "msg" => error_message, "request_id" => request_id}} ->
+              {:error, %{error_key: :send_fail, error_message: error_message, request_id: request_id, error_code: error_code}}
+            _ ->
+              {:error, %{error_key: :unknown_error, response_body: response_body}}
+          end
+        {:error, error_key} -> {:error, %{error_key: error_key}}
+      end
+
+    case final_response do
+      {:ok, response_body} -> Logger.info(inspect([__MODULE__, :num_send!, :ok, response_body]))
+      {:error, error_key} -> Logger.error(inspect([__MODULE__, :num_send!, :fail, error_key]))
     end
+
+    final_response
   end
 
 end
